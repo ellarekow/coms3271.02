@@ -6,8 +6,6 @@
 #define ROWS 21
 #define COLUMNS 80
 
-int north, south, east, west;
-
 char BLOCK[ROWS][COLUMNS];
 
 // generates the rock boarder
@@ -228,13 +226,9 @@ void gen_terrain(int n, int e, int s, int w)
                 BLOCK[row][column] = '.';
         }
     }
-    north = n;
-    south = s;
-    east = e;
-    west = w;
 }
 
-int main()
+void colorize()
 {
     int seed = time(NULL);
     srand(seed);
@@ -284,6 +278,4 @@ int main()
         }
         printf("\n");
     }
-
-    return 0;
 }
