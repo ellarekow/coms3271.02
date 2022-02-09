@@ -1,15 +1,7 @@
-struct Block
-{
-    int north;
-    int south;
-    int east;
-    int west;
-
-    char tile[21][80];
-} block;
+#include "terrain.h"
 
 int main()
 {
-
+    map();
     return 1;
 }

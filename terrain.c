@@ -6,6 +6,16 @@
 #define ROWS 21
 #define COLUMNS 80
 
+typedef struct Block
+{
+    int n;
+    int s;
+    int e;
+    int w;
+
+    char tile[ROWS][COLUMNS];
+} block;
+
 char BLOCK[ROWS][COLUMNS];
 
 // generates the rock boarder
@@ -20,16 +30,17 @@ void edge_gen()
         {
             if (column == 0 || row == 0 || column == COLUMNS - 1 || row == ROWS - 1)
                 BLOCK[row][column] = '%';
-            else
-                BLOCK[row][column] = ' ';
         }
     }
 }
 
-void path_gen(int n, int s, int e, int w)
+void path_gen(block *map)
 {
-    int row;
-    int column = n;
+    int row, column;
+    if (map->n != -1)
+        column = map->n;
+    else
+        column = rand() % COLUMNS;
 
     int random = rand() % 12;
 
@@ -53,13 +64,13 @@ void path_gen(int n, int s, int e, int w)
         // conects to the correct end
         else
         {
-            while (column < s)
+            while (column < map->s)
             {
                 BLOCK[row][column] = '#';
                 column++;
             }
 
-            while (column > s)
+            while (column > map->s)
             {
                 BLOCK[row][column] = '#';
                 column--;
@@ -68,7 +79,10 @@ void path_gen(int n, int s, int e, int w)
         }
     }
 
-    row = w;
+    if (map->w != -1)
+        row = map->w;
+    else
+        row = rand() % ROWS;
 
     // W to E
     for (column = 0; column < COLUMNS; column++)
@@ -90,13 +104,13 @@ void path_gen(int n, int s, int e, int w)
         // conects to the correct end
         else
         {
-            while (row < e)
+            while (row < map->e)
             {
                 BLOCK[row][column] = '#';
                 row++;
             }
 
-            while (row > e)
+            while (row > map->e)
             {
                 BLOCK[row][column] = '#';
                 row--;
@@ -169,14 +183,14 @@ void building_gen(char c)
 }
 
 // generates the map
-void gen_terrain(int n, int e, int s, int w)
+void gen_terrain(block *map)
 {
     edge_gen();
 
     int size = (rand() % 10) + 3;
     int row = (rand() % 5) + 2;
     int column = (rand() % 10) + 2;
-    int number = (rand() % 20) + 2;
+    int number = (rand() % 20) + 5;
 
     int what = rand() % 3;
 
@@ -198,12 +212,12 @@ void gen_terrain(int n, int e, int s, int w)
         if (what == 0)
         {
             if (row > 0 && column > 0)
-                BLOCK[row][column] = '%';
+                map->tile[row][column] = '%';
         }
         else if (what == 1)
         {
             if (row > 0 && column > 0)
-                BLOCK[row][column] = '"';
+                map->tile[row][column] = '"';
         }
         else
             patch_gen(size, row, column, ',');
@@ -213,7 +227,7 @@ void gen_terrain(int n, int e, int s, int w)
         column = (rand() % COLUMNS - 2) + 1;
         what = (rand() % 3);
     }
-    path_gen(n, s, e, w);
+    path_gen(map);
     building_gen('M');
     building_gen('C');
 
@@ -228,7 +242,7 @@ void gen_terrain(int n, int e, int s, int w)
     }
 }
 
-void colorize()
+void print_map(block *map)
 {
     int seed = time(NULL);
     srand(seed);
@@ -237,14 +251,7 @@ void colorize()
 
     int row, column;
 
-    int n, s, e, w;
-
-    n = rand() % COLUMNS;
-    s = rand() % COLUMNS;
-    e = rand() % ROWS;
-    w = rand() % ROWS;
-
-    gen_terrain(n, e, s, w);
+    gen_terrain(map);
 
     // prints the map
     char pos;
@@ -279,3 +286,36 @@ void colorize()
         printf("\n");
     }
 }
+
+void map()
+{
+    block *theMap[399][399];
+
+    int row, column;
+    for (row = 0; row < 399; row++)
+    {
+        for (column = 0; column < 399; column++)
+        {
+            theMap[row][column] = NULL;
+        }
+    }
+
+    print_map(theMap[150][150]);
+}
+
+void vist(block *map, block *toNorth, block *toSouth, block *toEast, block *toWest)
+{
+    if (map == NULL)
+    {
+        map->n = -1;
+        map->s = -1;
+        map->e = -1;
+        map->w = -1;
+    }
+
+    gen_terrain(map);
+}
+
+// if(column != 0 && column != 399 && row != 0 && row != 399){
+
+// }
