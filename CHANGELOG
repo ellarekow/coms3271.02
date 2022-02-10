@@ -1,0 +1,65 @@
+commit ce427fa10667b6c735960e8bcdbfdfec31ebe9c3
+Author: ellarekow <ellarekow@gmail.com>
+Date:   Wed Feb 9 22:36:54 2022 -0600
+
+    Finalized
+
+commit 11843119060c8d1b6d8094c3930dfae9014c8247
+Author: ellarekow <ellarekow@gmail.com>
+Date:   Wed Feb 9 21:26:54 2022 -0600
+
+    new visit
+
+commit 28b213aafa9ee838c7796248471e9d89de16ec75
+Author: ellarekow <ellarekow@gmail.com>
+Date:   Wed Feb 9 21:07:05 2022 -0600
+
+    Working map with bugs
+
+commit af491b127db903ca3483e75485f3850261f14870
+Author: ellarekow <ellarekow@gmail.com>
+Date:   Wed Feb 9 19:23:08 2022 -0600
+
+    a few tweaks and fixed seed
+
+commit bc298a329b9877f33a20258de0845a20ebb79efd
+Author: ellarekow <ellarekow@gmail.com>
+Date:   Wed Feb 9 18:59:26 2022 -0600
+
+    Can generate map with struct
+
+commit 416bcdfaa58aeae208ea387a15e4bea3b0ce9b9c
+Author: ellarekow <ellarekow@gmail.com>
+Date:   Wed Feb 9 16:08:52 2022 -0600
+
+    Created struct and pointers of main main
+
+commit d5afc94ac5dc0fc2f9ea7dec170aef304b0fc77a
+Author: ellarekow <ellarekow@gmail.com>
+Date:   Wed Feb 9 08:24:37 2022 -0600
+
+    gitignore for object files
+
+commit 159fd9cabd759c59a8f98ff53e88a828174a38da
+Author: ellarekow <ellarekow@gmail.com>
+Date:   Wed Feb 9 08:23:33 2022 -0600
+
+    Create block struct
+
+commit ebeb130d4b606f7542833d5b5aed93c8d76e03d8
+Author: ellarekow <ellarekow@gmail.com>
+Date:   Tue Feb 8 21:06:37 2022 -0600
+
+    Created h file
+
+commit 853dba37512a0a536c9d762ccce4988b0edb1d6e
+Author: ellarekow <ellarekow@gmail.com>
+Date:   Tue Feb 8 18:39:32 2022 -0600
+
+    Added terrain file
+
+commit 11dc382ad8c8f4ec3001aac814f0f7fd268fb3a6
+Author: Ella Rekow <just.ella2001@gmail.com>
+Date:   Tue Feb 8 10:01:44 2022 -0600
+
+    Initial commit
