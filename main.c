@@ -36,13 +36,16 @@ int main(int argc, char *argv[])
         {
             fullMap[i][j] = NULL;
             fullMap[i][j] = malloc(sizeof(block));
+            fullMap[i][j]->visited = 0;
+            fullMap[i][j]->y = 199 - i;
+            fullMap[i][j]->x = j - 199;
         }
     }
 
-    int row = 155;
-    int column = 155;
+    int row = 199;
+    int column = 199;
 
-    visit(fullMap[row][column], fullMap[row - 1][column], fullMap[row + 1][column], fullMap[row][column + 1], fullMap[row][column - 1]);
+    visit2(fullMap, row, column);
     print_map(fullMap[row][column]);
 
     printf("Please enter a direction:\n- 'n' for north\n- 's' for south\n- 'w' for west\n- 'e' for east\n- 'f XX YY' for fly (please ensure to include the 0X for single numbers) \n");
@@ -51,21 +54,36 @@ int main(int argc, char *argv[])
     while (run)
     {
         printf("Please enter a direction:\n");
-        char input[20];
-        scanf("%s", input);
+        char *input = NULL;
+        size_t len = 0;
+        getline(&input, &len, stdin);
 
         switch (input[0])
         {
         case 'f':
-            int tempRow = (input[2] - '0') * 10;
-            tempRow += input[3] - '0';
-            int tempColumn = (input[5] - '0') * 10;
-            tempColumn += input[6] - '0';
+            int tempRow;
+            tempRow = (int)(input[2]) * 100;
+            tempRow += (int)(input[3]) * 10;
+            tempRow += (int)(input[4]);
+
+            printf("%d", tempRow);
+
+            int tempColumn;
+            tempColumn = (int)(input[6]) * 100;
+            tempColumn += (int)(input[7]) * 10;
+            tempColumn += (int)(input[8]);
 
             if (tempColumn >= 0 && tempColumn <= 399 && tempRow >= 0 && tempRow <= 399)
             {
+                column = tempColumn;
+                row = tempRow;
+                break;
             }
-            break;
+            else
+            {
+                printf("Please enter a valid input.\n");
+                continue;
+            }
 
         case 'n':
             if (row < 399)
@@ -91,8 +109,9 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        visit(fullMap[row][column], fullMap[row - 1][column], fullMap[row + 1][column], fullMap[row][column + 1], fullMap[row][column - 1]);
+        visit2(fullMap, row, column);
         print_map(fullMap[row][column]);
+        free(input);
     }
 
     for (i = 0; i < 399; i++)

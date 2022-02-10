@@ -223,8 +223,13 @@ void gen_terrain(block *map)
         what = (rand() % 3);
     }
     path_gen(map);
-    building_gen('M', map);
-    building_gen('C', map);
+
+    int d = abs(map->x) + abs(map->y);
+    if (rand() % 100 > ((-45 * d / 200 + 50) / 100))
+    {
+        building_gen('M', map);
+        building_gen('C', map);
+    }
 
     // creates the border of impassible rocks
     for (row = 0; row < ROWS; row++)
@@ -305,8 +310,10 @@ void visit(block *map, block *toNorth, block *toSouth, block *toEast, block *toW
 
 void visit2(block *full[399][399], int row, int column)
 {
-    if (full[row][column] != NULL)
+    if (full[row][column]->visited)
+    {
         return;
+    }
 
     // checking block north
     if (row > 0)
@@ -352,5 +359,6 @@ void visit2(block *full[399][399], int row, int column)
     else
         full[row][column]->e = -1;
 
+    full[row][column]->visited = 1;
     gen_terrain(full[row][column]);
 }
