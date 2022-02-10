@@ -302,3 +302,55 @@ void visit(block *map, block *toNorth, block *toSouth, block *toEast, block *toW
         gen_terrain(map);
     }
 }
+
+void visit2(block *full[399][399], int row, int column)
+{
+    if (full[row][column] != NULL)
+        return;
+
+    // checking block north
+    if (row > 0)
+    {
+        if (full[row - 1][column] != NULL)
+            full[row][column]->n = full[row - 1][column]->s;
+        else
+            full[row][column]->n = -1;
+    }
+    else
+        full[row][column]->n = -1;
+
+    // checking for block south
+    if (row < 399)
+    {
+        if (full[row + 1][column] != NULL)
+            full[row][column]->s = full[row + 1][column]->n;
+        else
+            full[row][column]->s = -1;
+    }
+    else
+        full[row][column]->s = -1;
+
+    // checking block west
+    if (column > 0)
+    {
+        if (full[row][column - 1] != NULL)
+            full[row][column]->w = full[row][column - 1]->e;
+        else
+            full[row][column]->w = -1;
+    }
+    else
+        full[row][column]->w = -1;
+
+    // checking for block east
+    if (column < 399)
+    {
+        if (full[row][column + 1] != NULL)
+            full[row][column]->e = full[row][column + 1]->w;
+        else
+            full[row][column]->e = -1;
+    }
+    else
+        full[row][column]->e = -1;
+
+    gen_terrain(full[row][column]);
+}
