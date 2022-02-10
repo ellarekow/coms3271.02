@@ -1,6 +1,6 @@
 #ifndef TERRAIN_DOT_H
 #define TERRAIN_DOT_H
 
-void map();
+void map(int row, int column);
 
 #endif

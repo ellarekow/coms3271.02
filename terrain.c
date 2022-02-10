@@ -250,14 +250,7 @@ void gen_terrain(block *map)
 
 void print_map(block *map)
 {
-    int seed = time(NULL);
-    srand(seed);
-
-    printf("Seed: %d\n", seed);
-
     int row, column;
-
-    gen_terrain(map);
 
     // prints the map
     char pos;
@@ -306,11 +299,9 @@ void visit(block *map, block *toNorth, block *toSouth, block *toEast, block *toW
     gen_terrain(map);
 }
 
-void map()
+void map(int row, int column)
 {
     block *theMap[399][399];
-
-    int row, column;
     for (row = 0; row < 399; row++)
     {
         for (column = 0; column < 399; column++)
@@ -318,14 +309,11 @@ void map()
             theMap[row][column] = NULL;
         }
     }
-    row = 150;
-    column = 150;
     theMap[row][column] = malloc(sizeof (block));
 
     visit(theMap[row][column], theMap[row-1][column], theMap[row+1][column], theMap[row][column-1], theMap[row][column+1]);
     print_map(theMap[row][column]);
 
-    free(theMap[row][column]);
 }
 
 
