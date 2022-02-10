@@ -16,10 +16,8 @@ typedef struct Block
     char tile[ROWS][COLUMNS];
 } block;
 
-char BLOCK[ROWS][COLUMNS];
-
 // generates the rock boarder
-void edge_gen()
+void edge_gen(block *map)
 {
     int row, column;
 
@@ -29,7 +27,9 @@ void edge_gen()
         for (column = 0; column < COLUMNS; column++)
         {
             if (column == 0 || row == 0 || column == COLUMNS - 1 || row == ROWS - 1)
-                BLOCK[row][column] = '%';
+                map->tile[row][column] = '%';
+            else
+                map->tile[row][column] = ' ';
         }
     }
 }
@@ -39,14 +39,17 @@ void path_gen(block *map)
     int row, column;
     if (map->n != -1)
         column = map->n;
-    else
+    else {
         column = rand() % COLUMNS;
+        map->n = column;
+    }
 
     int random = rand() % 12;
 
     // N to S path
     for (row = 0; row < ROWS; row++)
     {
+        map->s = column;
         if (row < ROWS - 3)
         {
             if (column == 0)
@@ -54,7 +57,7 @@ void path_gen(block *map)
             else if (column == ROWS - 1)
                 column--;
 
-            BLOCK[row][column] = '#';
+            map->tile[row][column] = '#';
             if (random % 3 == 0 && column < COLUMNS - 1)
                 column += (rand() % 3) - 1;
 
@@ -66,27 +69,30 @@ void path_gen(block *map)
         {
             while (column < map->s)
             {
-                BLOCK[row][column] = '#';
+                map->tile[row][column] = '#';
                 column++;
             }
 
             while (column > map->s)
             {
-                BLOCK[row][column] = '#';
+                map->tile[row][column] = '#';
                 column--;
             }
-            BLOCK[row][column] = '#';
+            map->tile[row][column] = '#';
         }
     }
 
     if (map->w != -1)
         row = map->w;
-    else
+    else {
         row = rand() % ROWS;
+        map->w = row;
+    }
 
     // W to E
     for (column = 0; column < COLUMNS; column++)
     {
+        map->e = row;
         if (column < COLUMNS - 3)
         {
             if (row == 0)
@@ -94,7 +100,7 @@ void path_gen(block *map)
             else if (row == ROWS - 1)
                 row--;
 
-            BLOCK[row][column] = '#';
+            map->tile[row][column] = '#';
             if (random % 3 == 0 && row < ROWS - 1)
                 row += (rand() % 3) - 1;
 
@@ -106,22 +112,22 @@ void path_gen(block *map)
         {
             while (row < map->e)
             {
-                BLOCK[row][column] = '#';
+                map->tile[row][column] = '#';
                 row++;
             }
 
             while (row > map->e)
             {
-                BLOCK[row][column] = '#';
+                map->tile[row][column] = '#';
                 row--;
             }
-            BLOCK[row][column] = '#';
+            map->tile[row][column] = '#';
         }
     }
 }
 
 // generates patches of different types
-void patch_gen(int size, int startR, int startC, char c)
+void patch_gen(int size, int startR, int startC, char c, block *map)
 {
     int row;
     int column;
@@ -136,14 +142,14 @@ void patch_gen(int size, int startR, int startC, char c)
     {
         for (column = startC; (column < size + startC) && column < COLUMNS - 1; column++)
         {
-            if (BLOCK[row][column] == ' ')
-                BLOCK[row][column] = c;
+            if (map->tile[row][column] == ' ')
+                map->tile[row][column] = c;
         }
     }
 }
 
 // builds the different buildings
-void building_gen(char c)
+void building_gen(char c, block *map)
 {
     int row = (rand() % ROWS - 4);
     if (row < 1)
@@ -154,7 +160,7 @@ void building_gen(char c)
 
     int i, j;
 
-    while (BLOCK[row - 1][column] != '#' && BLOCK[row][column - 1] != '#' && BLOCK[row][column - 1] != 'M' && BLOCK[row][column - 1] != 'C' && row > 0 && row < ROWS && column > 0 && column < COLUMNS && BLOCK[row + 1][column] != '#' && BLOCK[row][column + 1] != '#' && BLOCK[row][column + 1] != 'M' && BLOCK[row][column + 1] != 'C')
+    while (map->tile[row - 1][column] != '#' && map->tile[row][column - 1] != '#' && map->tile[row][column - 1] != 'M' && map->tile[row][column - 1] != 'C' && row > 0 && row < ROWS && column > 0 && column < COLUMNS && map->tile[row + 1][column] != '#' && map->tile[row][column + 1] != '#' && map->tile[row][column + 1] != 'M' && map->tile[row][column + 1] != 'C')
     {
         row = ((rand() % ROWS) - 4);
         if (row < 1)
@@ -170,13 +176,13 @@ void building_gen(char c)
         {
             if (i == row || j == column || i == row + 3 || j == column + 5)
             {
-                if (BLOCK[i][j] != '%')
-                    BLOCK[i][j] = '#';
+                if (map->tile[i][j] != '%')
+                    map->tile[i][j] = '#';
             }
             else
             {
-                if (BLOCK[i][j] != '%')
-                    BLOCK[i][j] = c;
+                if (map->tile[i][j] != '%')
+                    map->tile[i][j] = c;
             }
         }
     }
@@ -185,7 +191,7 @@ void building_gen(char c)
 // generates the map
 void gen_terrain(block *map)
 {
-    edge_gen();
+    edge_gen(map);
 
     int size = (rand() % 10) + 3;
     int row = (rand() % 5) + 2;
@@ -197,7 +203,7 @@ void gen_terrain(block *map)
     int i;
     for (i = 0; i < 2; i++)
     {
-        patch_gen(size, row, column, ',');
+        patch_gen(size, row, column, ',', map);
 
         size = (rand() % 10) + 2;
         row = (rand() % ROWS - 2) + 1;
@@ -216,11 +222,11 @@ void gen_terrain(block *map)
         }
         else if (what == 1)
         {
-            if (row > 0 && column > 0)
+            if (row > 0 && column > 0 && map != NULL)
                 map->tile[row][column] = '"';
         }
         else
-            patch_gen(size, row, column, ',');
+            patch_gen(size, row, column, ',', map);
 
         size = (rand() % 10) + 2;
         row = (rand() % ROWS - 2) + 1;
@@ -228,16 +234,16 @@ void gen_terrain(block *map)
         what = (rand() % 3);
     }
     path_gen(map);
-    building_gen('M');
-    building_gen('C');
+    building_gen('M', map);
+    building_gen('C', map);
 
     // creates the border of impassible rocks
     for (row = 0; row < ROWS; row++)
     {
         for (column = 0; column < COLUMNS; column++)
         {
-            if (BLOCK[row][column] == ' ')
-                BLOCK[row][column] = '.';
+            if (map->tile[row][column] == ' ')
+                map->tile[row][column] = '.';
         }
     }
 }
@@ -260,7 +266,7 @@ void print_map(block *map)
         for (column = 0; column < COLUMNS; column++)
         {
 
-            pos = BLOCK[row][column];
+            pos = map->tile[row][column];
 
             // curses library for color
 
@@ -287,6 +293,19 @@ void print_map(block *map)
     }
 }
 
+void visit(block *map, block *toNorth, block *toSouth, block *toEast, block *toWest)
+{
+    if (map == NULL)
+    {
+        map->n = -1;
+        map->s = -1;
+        map->e = -1;
+        map->w = -1;
+    }
+
+    gen_terrain(map);
+}
+
 void map()
 {
     block *theMap[399][399];
@@ -299,22 +318,17 @@ void map()
             theMap[row][column] = NULL;
         }
     }
+    row = 150;
+    column = 150;
+    theMap[row][column] = malloc(sizeof (block));
 
-    print_map(theMap[150][150]);
+    visit(theMap[row][column], theMap[row-1][column], theMap[row+1][column], theMap[row][column-1], theMap[row][column+1]);
+    print_map(theMap[row][column]);
+
+    free(theMap[row][column]);
 }
 
-void vist(block *map, block *toNorth, block *toSouth, block *toEast, block *toWest)
-{
-    if (map == NULL)
-    {
-        map->n = -1;
-        map->s = -1;
-        map->e = -1;
-        map->w = -1;
-    }
 
-    gen_terrain(map);
-}
 
 // if(column != 0 && column != 399 && row != 0 && row != 399){
 
