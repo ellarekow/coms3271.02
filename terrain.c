@@ -3,19 +3,6 @@
 #include <time.h>
 #include "terrain.h"
 
-#define ROWS 21
-#define COLUMNS 80
-
-typedef struct Block
-{
-    int n;
-    int s;
-    int e;
-    int w;
-
-    char tile[ROWS][COLUMNS];
-} block;
-
 // generates the rock boarder
 void edge_gen(block *map)
 {
@@ -39,7 +26,8 @@ void path_gen(block *map)
     int row, column;
     if (map->n != -1)
         column = map->n;
-    else {
+    else
+    {
         column = rand() % COLUMNS;
         map->n = column;
     }
@@ -84,7 +72,8 @@ void path_gen(block *map)
 
     if (map->w != -1)
         row = map->w;
-    else {
+    else
+    {
         row = rand() % ROWS;
         map->w = row;
     }
@@ -290,34 +279,26 @@ void visit(block *map, block *toNorth, block *toSouth, block *toEast, block *toW
 {
     if (map == NULL)
     {
-        map->n = -1;
-        map->s = -1;
-        map->e = -1;
-        map->w = -1;
+        if (toNorth != NULL)
+            map->n = toNorth->s;
+        else
+            map->n = -1;
+
+        if (toSouth != NULL)
+            map->s = toSouth->n;
+        else
+            map->s = -1;
+
+        if (toEast != NULL)
+            map->e = toEast->w;
+        else
+            map->e = -1;
+
+        if (toWest != NULL)
+            map->w = toWest->e;
+        else
+            map->w = -1;
+
+        gen_terrain(map);
     }
-
-    gen_terrain(map);
 }
-
-void map(int row, int column)
-{
-    block *theMap[399][399];
-    for (row = 0; row < 399; row++)
-    {
-        for (column = 0; column < 399; column++)
-        {
-            theMap[row][column] = NULL;
-        }
-    }
-    theMap[row][column] = malloc(sizeof (block));
-
-    visit(theMap[row][column], theMap[row-1][column], theMap[row+1][column], theMap[row][column-1], theMap[row][column+1]);
-    print_map(theMap[row][column]);
-
-}
-
-
-
-// if(column != 0 && column != 399 && row != 0 && row != 399){
-
-// }
