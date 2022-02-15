@@ -1,0 +1,8 @@
+Compile like normal using: 
+```gcc main.c terrain.c -o main```
+
+and run with ```./main ```
+
+(or all in one like with 
+```gcc main.c terrain.c -o main && ./main```
+)

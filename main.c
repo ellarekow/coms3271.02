@@ -51,6 +51,9 @@ int main(int argc, char *argv[])
     printf("Please enter a direction:\n- 'n' for north\n- 's' for south\n- 'w' for west\n- 'e' for east\n- 'f XX YY' for fly (please ensure to include the 0X for single numbers) \n");
 
     int run = 1;
+
+    int tempRow;
+    int tempColumn;
     while (run)
     {
         printf("Please enter a direction:\n");
@@ -61,14 +64,12 @@ int main(int argc, char *argv[])
         switch (input[0])
         {
         case 'f':
-            int tempRow;
             tempRow = (int)(input[2]) * 100;
             tempRow += (int)(input[3]) * 10;
             tempRow += (int)(input[4]);
 
             printf("%d", tempRow);
 
-            int tempColumn;
             tempColumn = (int)(input[6]) * 100;
             tempColumn += (int)(input[7]) * 10;
             tempColumn += (int)(input[8]);
